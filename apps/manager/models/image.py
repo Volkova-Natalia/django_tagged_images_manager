@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 from .base import BaseModel
 from .tag import Tag
@@ -21,3 +22,9 @@ class Image(BaseModel):
         related_name='images', related_query_name='image',
         verbose_name='Tag', help_text='Tags for the image',
     )
+
+    def __str__(self):
+        return self.content
+
+    def get_absolute_url(self):
+        return reverse('image-details', kwargs={'image_id': self.id})
