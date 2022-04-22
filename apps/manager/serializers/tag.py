@@ -49,8 +49,8 @@ class TagPostSerializer(TagSerializer):
         }
 
 
-class TagPutSerializer(TagWithoutPKSerializer):
-    class Meta(TagWithoutPKSerializer.Meta):
+class TagPutSerializer(TagSerializer):
+    class Meta(TagSerializer.Meta):
         extra_kwargs = {
             'value': {
                 'required': True,

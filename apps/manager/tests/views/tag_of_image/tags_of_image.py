@@ -1,3 +1,5 @@
+from typing import Optional
+
 from rest_framework import status
 from rest_framework.response import Response
 
@@ -16,22 +18,17 @@ class TagsOfImageViewsTestCase(BaseViewsTestCase):
     def post(self, *, image_id: int = 0, **kwargs) -> Response:
         return super().post(url=f'{self.base_url}{image_id}/tags/', **kwargs)
 
-    def _create_tag_in_db(self, **kwargs) -> Tag:
-        tag = Tag.objects.create(**kwargs)
-        tag.save()
-        return tag
-
-    def _create_image_in_db(self, *, tags=None, **kwargs) -> Image:
+    def _create_image_in_db(self, *, tag: Optional[Tag] = None, **kwargs) -> Image:
         image = Image.objects.create(**kwargs)
         image.save()
-        image.tags.add(tags)
+        image.tags.add(tag)
         return image
 
     def test_get_405_fail(self):
         response = self.get()
         self.assertEquals(response.status_code,
                           status.HTTP_405_METHOD_NOT_ALLOWED,
-                          f'{self.assert_message} test_get_405_fail')
+                          f'{self.assert_message} test_post_success')
 
     def test_post_success(self):
         image_in_db = {
