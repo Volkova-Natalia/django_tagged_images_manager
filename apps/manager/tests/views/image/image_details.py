@@ -18,7 +18,7 @@ class ImageDetailsViewsTestCase(BaseViewsTestCase):
     def delete(self, *, image_id: int = 0, **kwargs) -> Response:
         return super().delete(url=f'{self.base_url}{image_id}', **kwargs)
 
-    def _create_image_in_db(self, **kwargs):
+    def _create_image_in_db(self, **kwargs) -> Image:
         image = Image.objects.create(**kwargs)
         image.save()
         return image

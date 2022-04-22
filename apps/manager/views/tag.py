@@ -15,7 +15,6 @@ class TagsView(BaseView):
         if request.successful_authenticator is None:
             return self.response_401()
         objs = self.model.objects.all()[:]
-
         serializer = self.get_serializer(objs, context={'request': request}, many=True)
         return self.response_200(data=serializer.data)
 

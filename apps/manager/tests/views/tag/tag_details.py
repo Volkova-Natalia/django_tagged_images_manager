@@ -18,7 +18,7 @@ class TagDetailsViewsTestCase(BaseViewsTestCase):
     def delete(self, *, tag_value: str = '', **kwargs) -> Response:
         return super().delete(url=f'{self.base_url}{tag_value}', **kwargs)
 
-    def _create_tag_in_db(self, **kwargs):
+    def _create_tag_in_db(self, **kwargs) -> Tag:
         tag = Tag.objects.create(**kwargs)
         tag.save()
         return tag

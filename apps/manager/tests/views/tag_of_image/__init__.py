@@ -1,0 +1,2 @@
+from .tags_of_image import TagsOfImageViewsTestCase
+from .tag_of_image_details import TagOfImageDetailsViewsTestCase
