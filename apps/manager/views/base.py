@@ -2,10 +2,12 @@ from typing import Optional, Any, Dict
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 
 
 class BaseView(APIView):
+    permission_classes = (IsAuthenticated,)
     content_type = 'application/json'
 
     def response_200(self, *, data: Optional[Dict[str, Any]]) -> Response:

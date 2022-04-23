@@ -25,8 +25,6 @@ class TagsOfImageView(BaseView):
         return tag
 
     def post(self, request: Request, image_id: int, *args, **kwargs) -> Response:
-        if request.successful_authenticator is None:
-            return self.response_401()
         image = self._get_image(image_id=image_id)
         if not image:
             return self.response_404()
@@ -63,8 +61,6 @@ class TagOfImageDetailsView(BaseView):
         return tag
 
     def put(self, request: Request, image_id: int, tag_value: str, *args, **kwargs) -> Response:
-        if request.successful_authenticator is None:
-            return self.response_401()
         image = self._get_image(image_id=image_id)
         if not image:
             return self.response_404()
