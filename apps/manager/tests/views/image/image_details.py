@@ -60,9 +60,6 @@ class ImageDetailsViewsTestCase(BaseImageViewsTestCase):
                           1,
                           f'{self.assert_message} test_put_success')
         image_new = Image.objects.get(id=image.id)
-        from PIL import Image as PILImage
-        img_new = PILImage.open(image_new.content.path)
-        img_new.show()
         self.image_file_saved = image_new.content.name
         self.assertEquals([image_new.id, image_new.tags],
                           [image.id, image.tags],

@@ -1,5 +1,3 @@
-from typing import Optional
-
 from rest_framework import status
 from rest_framework.response import Response
 
@@ -28,9 +26,6 @@ class TagOfImageDetailsViewsTestCase(BaseTagOfImageViewsTestCase):
                           f'{self.assert_message} test_get_405_fail')
 
     def test_put_success(self):
-        image_in_db = {
-            'content': 'image_0'
-        }
         tag_in_db = {
             'value': 'tag_0'
         }
@@ -38,7 +33,7 @@ class TagOfImageDetailsViewsTestCase(BaseTagOfImageViewsTestCase):
             'value': 'tag_0_new'
         }
         tag = self._create_tag_in_db(**tag_in_db)
-        image = self._create_image_in_db(tag=tag, **image_in_db)
+        image = self._create_image_in_db(filename=self.image_0_filename, tag=tag)
         response = self.put(image_id=image.id, tag_value=tag.value, data=tag_put)
         self.assertEquals(response.status_code,
                           status.HTTP_204_NO_CONTENT,
@@ -54,9 +49,6 @@ class TagOfImageDetailsViewsTestCase(BaseTagOfImageViewsTestCase):
 
 
     def test_put_401_fail(self):
-        image_in_db = {
-            'content': 'image_0'
-        }
         tag_in_db = {
             'value': 'tag_0'
         }
@@ -64,7 +56,7 @@ class TagOfImageDetailsViewsTestCase(BaseTagOfImageViewsTestCase):
             'value': 'tag_0_new'
         }
         tag = self._create_tag_in_db(**tag_in_db)
-        image = self._create_image_in_db(tag=tag, **image_in_db)
+        image = self._create_image_in_db(filename=self.image_0_filename, tag=tag)
         response = self.put(anonymous=True, image_id=image.id, tag_value=tag.value, data=tag_put)
         self.assertEquals(response.status_code,
                           status.HTTP_401_UNAUTHORIZED,
@@ -84,22 +76,16 @@ class TagOfImageDetailsViewsTestCase(BaseTagOfImageViewsTestCase):
                           f'{self.assert_message} test_put_404_fail_image')
 
     def test_put_404_fail_tag(self):
-        image_in_db = {
-            'content': 'image_0'
-        }
         tag_put = {
             'value': 'tag_0_new'
         }
-        image = self._create_image_in_db(**image_in_db)
+        image = self._create_image_in_db(filename=self.image_0_filename)
         response = self.put(image_id=image.id, tag_value='AAA', data=tag_put)
         self.assertEquals(response.status_code,
                           status.HTTP_404_NOT_FOUND,
                           f'{self.assert_message} test_put_404_fail_tag')
 
     def test_put_400_fail(self):
-        image_in_db = {
-            'content': 'image_0'
-        }
         tag_in_db = {
             'value': 'tag_0'
         }
@@ -107,21 +93,18 @@ class TagOfImageDetailsViewsTestCase(BaseTagOfImageViewsTestCase):
             'not_value': 'tag_0_new'
         }
         tag = self._create_tag_in_db(**tag_in_db)
-        image = self._create_image_in_db(tag=tag, **image_in_db)
+        image = self._create_image_in_db(filename=self.image_0_filename, tag=tag)
         response = self.put(image_id=image.id, tag_value=tag.value, data=tag_put)
         self.assertEquals(response.status_code,
                           status.HTTP_400_BAD_REQUEST,
                           f'{self.assert_message} test_put_400_fail')
 
     def test_delete_success(self):
-        image_in_db = {
-            'content': 'image_0'
-        }
         tag_in_db = {
             'value': 'tag_0'
         }
         tag = self._create_tag_in_db(**tag_in_db)
-        image = self._create_image_in_db(tag=tag, **image_in_db)
+        image = self._create_image_in_db(filename=self.image_0_filename, tag=tag)
         response = self.delete(image_id=image.id, tag_value=tag.value)
         self.assertEquals(response.status_code,
                           status.HTTP_204_NO_CONTENT,
@@ -136,14 +119,11 @@ class TagOfImageDetailsViewsTestCase(BaseTagOfImageViewsTestCase):
                           f'{self.assert_message} test_delete_success')
 
     def test_delete_401_fail(self):
-        image_in_db = {
-            'content': 'image_0'
-        }
         tag_in_db = {
             'value': 'tag_0'
         }
         tag = self._create_tag_in_db(**tag_in_db)
-        image = self._create_image_in_db(tag=tag, **image_in_db)
+        image = self._create_image_in_db(filename=self.image_0_filename, tag=tag)
         response = self.delete(anonymous=True, image_id=image.id, tag_value=tag.value)
         self.assertEquals(response.status_code,
                           status.HTTP_401_UNAUTHORIZED,
@@ -160,10 +140,7 @@ class TagOfImageDetailsViewsTestCase(BaseTagOfImageViewsTestCase):
                           f'{self.assert_message} test_delete_404_fail_image')
 
     def test_delete_404_fail_tag(self):
-        image_in_db = {
-            'content': 'image_0'
-        }
-        image = self._create_image_in_db(**image_in_db)
+        image = self._create_image_in_db(filename=self.image_0_filename)
         response = self.delete(image_id=image.id, tag_value='AAA')
         self.assertEquals(response.status_code,
                           status.HTTP_404_NOT_FOUND,

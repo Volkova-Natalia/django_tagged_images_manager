@@ -27,7 +27,7 @@ class ImagesViewsTestCase(BaseImageViewsTestCase):
         return super().post(url=url, **my_headers, **kwargs)
 
     def test_get_success(self):
-        image = self._create_image_in_db()
+        image = self._create_image_in_db(filename=self.image_0_filename)
         response = self.get()
         self.assertEquals(response.status_code,
                           status.HTTP_200_OK,

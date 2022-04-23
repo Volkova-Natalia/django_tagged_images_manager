@@ -15,7 +15,7 @@ class BaseImageViewsTestCase(BaseViewsTestCase):
             Image().content.storage.delete(self.image_file_saved)
         super().tearDown()
 
-    def _create_image_in_db(self, filename: Optional[str] = None, **kwargs) -> Image:
+    def _create_image_in_db(self, *, filename: Optional[str] = None, **kwargs) -> Image:
         if filename is None:
             filename = self.image_0_filename
         image_with_metadata = ImageWithMetadata(filename=filename)

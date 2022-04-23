@@ -1,10 +1,7 @@
-from typing import Optional
-
 from rest_framework import status
 from rest_framework.response import Response
 
 from apps.manager.models.image import Image
-from apps.manager.models.tag import Tag
 from .base import BaseTagOfImageViewsTestCase
 
 
@@ -25,13 +22,10 @@ class TagsOfImageViewsTestCase(BaseTagOfImageViewsTestCase):
                           f'{self.assert_message} test_post_success')
 
     def test_post_success(self):
-        image_in_db = {
-            'content': 'image_0'
-        }
         tag_post = {
             'value': 'tag_0'
         }
-        image = self._create_image_in_db(**image_in_db)
+        image = self._create_image_in_db(filename=self.image_0_filename)
         response = self.post(image_id=image.id, data=tag_post)
         self.assertEquals(response.status_code,
                           status.HTTP_201_CREATED,
@@ -44,13 +38,10 @@ class TagsOfImageViewsTestCase(BaseTagOfImageViewsTestCase):
                           f'{self.assert_message} test_post_success')
 
     def test_post_401_fail(self):
-        image_in_db = {
-            'content': 'image_0'
-        }
         tag_post = {
             'value': 'tag_0'
         }
-        image = self._create_image_in_db(**image_in_db)
+        image = self._create_image_in_db(filename=self.image_0_filename)
         response = self.post(anonymous=True, image_id=image.id, data=tag_post)
         self.assertEquals(response.status_code,
                           status.HTTP_401_UNAUTHORIZED,
@@ -66,13 +57,10 @@ class TagsOfImageViewsTestCase(BaseTagOfImageViewsTestCase):
                           f'{self.assert_message} test_post_404_fail')
 
     def test_post_400_fail(self):
-        image_in_db = {
-            'content': 'image_0'
-        }
         tag_post = {
             'not_value': 'tag_0'
         }
-        image = self._create_image_in_db(**image_in_db)
+        image = self._create_image_in_db(filename=self.image_0_filename)
         response = self.post(image_id=image.id, data=tag_post)
         self.assertEquals(response.status_code,
                           status.HTTP_400_BAD_REQUEST,
