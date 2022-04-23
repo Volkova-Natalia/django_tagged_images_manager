@@ -2,6 +2,12 @@ version: '3.8'
 services:
   web:
     build: .
+    command: >
+      sh -c "./scripts/wait-for-postgres.sh &&
+             python3 -m manage makemigrations &&
+             python3 -m manage migrate &&
+             ./scripts/wait-for-postgres.sh &&
+             python3 -m manage test"
     volumes:
       - .:/tagged_images_manager_service
     ports:
@@ -22,7 +28,7 @@ services:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
     restart: always
     volumes:
-      - ./init_test_db.sql:/docker-entrypoint-initdb.d/init_test_db.sql
+      - ./scripts/init_test_db.sh:/docker-entrypoint-initdb.d/init_test_db.sh
       - app-db-data:/var/lib/postgresql
 
 volumes:
