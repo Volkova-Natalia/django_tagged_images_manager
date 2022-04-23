@@ -35,36 +35,40 @@ class BaseViewsTestCase(TestCase):
         self.registered_client.logout()
         super().tearDown()
 
-    def get(self, *, anonymous=False, url='') -> Response:
+    def get(self, *, anonymous=False, url='', **kwargs) -> Response:
         client = self.anonymous_client if anonymous else self.registered_client
         return client.get(
             path=url,
             content_type=self.content_type,
             HTTP_ACCEPT=self.content_type,
+            **kwargs
         )
 
-    def post(self, *, anonymous=False, url='', data: Optional[Dict[str, Any]] = None) -> Response:
+    def post(self, *, anonymous=False, url='', data: Optional[Dict[str, Any]] = None, **kwargs) -> Response:
         client = self.anonymous_client if anonymous else self.registered_client
         return client.post(
             path=url,
             data=data,
             content_type=self.content_type,
             HTTP_ACCEPT=self.content_type,
+            **kwargs
         )
 
-    def put(self, *, anonymous=False, url='', data: Optional[Dict[str, Any]] = None) -> Response:
+    def put(self, *, anonymous=False, url='', data: Optional[Dict[str, Any]] = None, **kwargs) -> Response:
         client = self.anonymous_client if anonymous else self.registered_client
         return client.put(
             path=url,
             data=data,
             content_type=self.content_type,
             HTTP_ACCEPT=self.content_type,
+            **kwargs
         )
 
-    def delete(self, *, anonymous=False, url='') -> Response:
+    def delete(self, *, anonymous=False, url='', **kwargs) -> Response:
         client = self.anonymous_client if anonymous else self.registered_client
         return client.delete(
             path=url,
             content_type=self.content_type,
             HTTP_ACCEPT=self.content_type,
+            **kwargs
         )

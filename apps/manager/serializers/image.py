@@ -1,4 +1,7 @@
+import base64
+
 from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 
 from apps.manager.models.image import Image
 
@@ -9,6 +12,7 @@ class ImageSerializer(ModelSerializer):
         fields = [
             'id',
             'content',
+            'metadata',
             'tags',
         ]
 
@@ -18,6 +22,7 @@ class ImageWithoutPKSerializer(ModelSerializer):
         model = Image
         fields = [
             'content',
+            'metadata',
             'tags',
         ]
 
@@ -35,6 +40,10 @@ class ImageGetSerializer(ImageSerializer):
                 'read_only': True,
                 'required': True,
             },
+            'metadata': {
+                'read_only': True,
+                'required': True,
+            },
             'created_date': {
                 'read_only': True,
                 'required': True,
@@ -47,10 +56,35 @@ class ImageGetSerializer(ImageSerializer):
         }
 
 
-class ImagePostSerializer(ImageWithoutPKSerializer):
+class ImagePostSerializer(serializers.Serializer):
+    content = serializers.CharField(
+        allow_blank=False,
+        required=True,
+    )
+    metadata = serializers.CharField(
+        allow_blank=True,
+        required=True,
+    )
+
+    def create(self, validated_data):
+        headers = self.context['request'].headers
+        coder = headers['X-Content-Image-coder'] if 'X-Content-Image-coder' in headers else 'utf-18'
+        img_base64 = validated_data['content'].encode(coder)
+        img_byte = base64.b64decode(img_base64)
+
+        obj = Image(metadata=str(validated_data['metadata']))
+        obj.save_file(content=img_byte)
+        obj.save()
+        return obj
+
+
+class _ImagePostSerializer(ImageWithoutPKSerializer):
     class Meta(ImageWithoutPKSerializer.Meta):
         extra_kwargs = {
             'content': {
+                'required': True,
+            },
+            'metadata': {
                 'required': True,
             },
         }
@@ -60,6 +94,9 @@ class ImagePutSerializer(ImageWithoutPKSerializer):
     class Meta(ImageWithoutPKSerializer.Meta):
         extra_kwargs = {
             'content': {
+                'required': False,
+            },
+            'metadata': {
                 'required': False,
             },
         }

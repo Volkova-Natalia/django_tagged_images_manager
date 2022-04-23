@@ -12,7 +12,7 @@ class Tag(BaseModel):
         null=False, blank=False, unique=False,
         auto_now_add=True,
         verbose_name='Date',
-        help_text='Created date of the tag'
+        help_text='Created date of the tag',
     )
 
     def __str__(self):
