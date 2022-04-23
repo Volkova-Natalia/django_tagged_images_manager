@@ -5,10 +5,10 @@ from rest_framework.response import Response
 
 from apps.manager.models.image import Image
 from apps.manager.models.tag import Tag
-from ..base import BaseViewsTestCase
+from .base import BaseTagOfImageViewsTestCase
 
 
-class TagsOfImageViewsTestCase(BaseViewsTestCase):
+class TagsOfImageViewsTestCase(BaseTagOfImageViewsTestCase):
     base_url = '/manager/images/'
     assert_message = 'tags_of_image views'
 
@@ -17,12 +17,6 @@ class TagsOfImageViewsTestCase(BaseViewsTestCase):
 
     def post(self, *, image_id: int = 0, **kwargs) -> Response:
         return super().post(url=f'{self.base_url}{image_id}/tags/', **kwargs)
-
-    def _create_image_in_db(self, *, tag: Optional[Tag] = None, **kwargs) -> Image:
-        image = Image.objects.create(**kwargs)
-        image.save()
-        image.tags.add(tag)
-        return image
 
     def test_get_405_fail(self):
         response = self.get()

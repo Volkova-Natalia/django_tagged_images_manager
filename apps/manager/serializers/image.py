@@ -1,3 +1,4 @@
+import os
 import base64
 
 from rest_framework.serializers import ModelSerializer
@@ -66,7 +67,7 @@ class ImagePostSerializer(serializers.Serializer):
         required=True,
     )
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict) -> Image:
         headers = self.context['request'].headers
         coder = headers['X-Content-Image-coder'] if 'X-Content-Image-coder' in headers else 'utf-18'
         img_base64 = validated_data['content'].encode(coder)
@@ -78,25 +79,25 @@ class ImagePostSerializer(serializers.Serializer):
         return obj
 
 
-class _ImagePostSerializer(ImageWithoutPKSerializer):
-    class Meta(ImageWithoutPKSerializer.Meta):
-        extra_kwargs = {
-            'content': {
-                'required': True,
-            },
-            'metadata': {
-                'required': True,
-            },
-        }
+class ImagePutSerializer(serializers.Serializer):
+    content = serializers.CharField(
+        allow_blank=False,
+        required=True,
+    )
+    metadata = serializers.CharField(
+        allow_blank=True,
+        required=True,
+    )
 
+    def update(self, instance: Image, validated_data: dict) -> Image:
+        headers = self.context['request'].headers
+        coder = headers['X-Content-Image-coder'] if 'X-Content-Image-coder' in headers else 'utf-18'
+        img_base64 = validated_data['content'].encode(coder)
+        img_byte = base64.b64decode(img_base64)
 
-class ImagePutSerializer(ImageWithoutPKSerializer):
-    class Meta(ImageWithoutPKSerializer.Meta):
-        extra_kwargs = {
-            'content': {
-                'required': False,
-            },
-            'metadata': {
-                'required': False,
-            },
-        }
+        os.remove(self.instance.content.path)
+
+        instance.metadata = validated_data.get('metadata', instance.metadata)
+        instance.save_file(content=img_byte)
+        instance.save()
+        return instance

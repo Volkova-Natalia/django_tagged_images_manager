@@ -100,8 +100,7 @@ class TagDetailsViewsTestCase(BaseViewsTestCase):
         self.assertEquals(response.status_code,
                           status.HTTP_204_NO_CONTENT,
                           f'{self.assert_message} test_delete_success')
-        tags = Tag.objects.all()[:]
-        self.assertEquals(len(tags),
+        self.assertEquals(Tag.objects.count(),
                           0,
                           f'{self.assert_message} test_delete_success')
 

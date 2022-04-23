@@ -5,10 +5,10 @@ from rest_framework.response import Response
 
 from apps.manager.models.image import Image
 from apps.manager.models.tag import Tag
-from ..base import BaseViewsTestCase
+from .base import BaseTagOfImageViewsTestCase
 
 
-class TagOfImageDetailsViewsTestCase(BaseViewsTestCase):
+class TagOfImageDetailsViewsTestCase(BaseTagOfImageViewsTestCase):
     base_url = '/manager/images/'
     assert_message = 'tag_of_image details views'
 
@@ -20,17 +20,6 @@ class TagOfImageDetailsViewsTestCase(BaseViewsTestCase):
 
     def delete(self, *, image_id: int = 0, tag_value: str = '', **kwargs) -> Response:
         return super().delete(url=f'{self.base_url}{image_id}/tags/{tag_value}', **kwargs)
-
-    def _create_tag_in_db(self, **kwargs) -> Tag:
-        tag = Tag.objects.create(**kwargs)
-        tag.save()
-        return tag
-
-    def _create_image_in_db(self, *, tag: Optional[Tag] = None, **kwargs) -> Image:
-        image = Image.objects.create(**kwargs)
-        image.save()
-        image.tags.add(tag)
-        return image
 
     def test_get_405_fail(self):
         response = self.get()
@@ -142,8 +131,7 @@ class TagOfImageDetailsViewsTestCase(BaseViewsTestCase):
         self.assertEquals(len(image_new_tags),
                           0,
                           f'{self.assert_message} test_delete_success')
-        tags = Tag.objects.all()[:]
-        self.assertEquals(len(tags),
+        self.assertEquals(Tag.objects.count(),
                           1,
                           f'{self.assert_message} test_delete_success')
 
