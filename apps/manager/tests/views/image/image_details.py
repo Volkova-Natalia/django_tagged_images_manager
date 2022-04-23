@@ -67,7 +67,7 @@ class ImageDetailsViewsTestCase(BaseImageViewsTestCase):
         from PIL import Image as PILImage
         img_new = PILImage.open(image_new.content.path)
         img_new.show()
-        self.image_file_saved = image_new.content.path
+        self.image_file_saved = image_new.content.name
         self.assertEquals([image_new.id, image_new.tags],
                           [image.id, image.tags],
                           f'{self.assert_message} test_put_success')
@@ -92,10 +92,7 @@ class ImageDetailsViewsTestCase(BaseImageViewsTestCase):
                           f'{self.assert_message} test_put_404_fail')
 
     def test_delete_success(self):
-        data_in_db = {
-            'content': 'image_0'
-        }
-        image = self._create_image_in_db(**data_in_db)
+        image = self._create_image_in_db(filename=self.image_0_filename)
         response = self.delete(image_id=image.id)
         self.assertEquals(response.status_code,
                           status.HTTP_204_NO_CONTENT,
@@ -105,10 +102,7 @@ class ImageDetailsViewsTestCase(BaseImageViewsTestCase):
                           f'{self.assert_message} test_delete_success')
 
     def test_delete_401_fail(self):
-        data_in_db = {
-            'content': 'image_0'
-        }
-        image = self._create_image_in_db(**data_in_db)
+        image = self._create_image_in_db(filename=self.image_0_filename)
         response = self.delete(anonymous=True, image_id=image.id)
         self.assertEquals(response.status_code,
                           status.HTTP_401_UNAUTHORIZED,

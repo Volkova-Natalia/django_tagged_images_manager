@@ -4,6 +4,7 @@ from uuid import uuid4
 
 from django.db import models
 from django.urls import reverse
+from django.dispatch import receiver
 from django.core.files.base import ContentFile
 
 from .base import BaseModel
@@ -55,3 +56,10 @@ class Image(BaseModel):
     def save_file(self, content: str):
         temp_file = ContentFile(content)
         self.content.save('', temp_file)
+
+
+@receiver(models.signals.post_delete, sender=Image)
+def auto_delete_file_on_delete(sender, instance, **kwargs):
+    if instance.content:
+        if instance.content.storage.exists(instance.content.name):
+            instance.content.storage.delete(instance.content.name)

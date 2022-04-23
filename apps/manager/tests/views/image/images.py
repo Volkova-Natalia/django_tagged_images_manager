@@ -49,7 +49,7 @@ class ImagesViewsTestCase(BaseImageViewsTestCase):
                           1,
                           f'{self.assert_message} test_post_success')
         image_new = Image.objects.get(id=response.data['id'])
-        self.image_file_saved = image_new.content.path
+        self.image_file_saved = image_new.content.name
         self.assertEquals(image_new.metadata,
                           data_post['metadata'],
                           f'{self.assert_message} test_post_success')

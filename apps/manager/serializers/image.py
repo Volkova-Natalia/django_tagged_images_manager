@@ -1,4 +1,3 @@
-import os
 import base64
 
 from rest_framework.serializers import ModelSerializer
@@ -95,9 +94,12 @@ class ImagePutSerializer(serializers.Serializer):
         img_base64 = validated_data['content'].encode(coder)
         img_byte = base64.b64decode(img_base64)
 
-        os.remove(self.instance.content.path)
+        old_file = instance.content.name
 
         instance.metadata = validated_data.get('metadata', instance.metadata)
         instance.save_file(content=img_byte)
         instance.save()
+
+        if Image().content.storage.exists(old_file):
+            Image().content.storage.delete(old_file)
         return instance
