@@ -59,8 +59,7 @@ class TagDetailsView(BaseView):
         return self.response_400(data=serializer.errors)
 
     def delete(self, request: Request, tag_value: str, *args, **kwargs) -> Response:
-        obj = self._get_object(obj_value=tag_value)
-        if not obj:
+        obj_count, obj = self.model.objects.filter(value=tag_value).delete()
+        if obj_count == 0:
             return self.response_404()
-        obj.delete()
         return self.response_204()

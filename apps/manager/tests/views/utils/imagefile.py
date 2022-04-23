@@ -14,6 +14,7 @@ class ImageWithMetadata:
         self.content = None
         self.content_raw = None
         self.metadata = None
+        self.data = None
         self.make_data()
         self.create(filename=filename)
 

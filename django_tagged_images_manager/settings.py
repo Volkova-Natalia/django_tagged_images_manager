@@ -28,9 +28,10 @@ load_dotenv()
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
 
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'local')
+
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(strtobool(os.getenv('DEBUG', 'False')))
-DEBUG = True
+DEBUG = bool(strtobool(os.getenv('DEBUG', 'True' if ENVIRONMENT == 'local' else 'False')))
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -105,6 +106,9 @@ DATABASES = {
         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
         'HOST': os.getenv('POSTGRES_HOST', 'localhost'),
         'PORT': str(os.getenv('POSTGRES_PORT', 5432)),
+
+        'ATOMIC_REQUESTS': True,
+        'AUTOCOMMIT': True,
     }
 }
 

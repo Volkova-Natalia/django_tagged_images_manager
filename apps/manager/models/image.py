@@ -36,7 +36,7 @@ class Image(BaseModel):
         verbose_name='Content',
         help_text='Image',
     )
-    metadata = models.TextField(
+    metadata = models.JSONField(
         null=True, blank=True, unique=False,
         verbose_name='Metadata',
         help_text='Metadata of the image',

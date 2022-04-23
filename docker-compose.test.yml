@@ -15,6 +15,7 @@ services:
     depends_on:
       - db
     environment:
+      - ENVIRONMENT=local
       - POSTGRES_DB=tagged_images_manager_service_test_db
       - POSTGRES_HOST=db
 

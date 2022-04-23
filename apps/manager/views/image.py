@@ -59,8 +59,7 @@ class ImageDetailsView(BaseView):
         return self.response_400(data=serializer.errors)
 
     def delete(self, request: Request, image_id: int, *args, **kwargs) -> Response:
-        obj = self._get_object(obj_id=image_id)
-        if not obj:
+        obj_count, obj = self.model.objects.filter(id=image_id).delete()
+        if obj_count == 0:
             return self.response_404()
-        obj.delete()
         return self.response_204()

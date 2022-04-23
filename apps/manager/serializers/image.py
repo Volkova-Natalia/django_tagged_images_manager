@@ -61,8 +61,7 @@ class ImagePostSerializer(serializers.Serializer):
         allow_blank=False,
         required=True,
     )
-    metadata = serializers.CharField(
-        allow_blank=True,
+    metadata = serializers.JSONField(
         required=True,
     )
 
@@ -83,8 +82,7 @@ class ImagePutSerializer(serializers.Serializer):
         allow_blank=False,
         required=True,
     )
-    metadata = serializers.CharField(
-        allow_blank=True,
+    metadata = serializers.JSONField(
         required=True,
     )
 
