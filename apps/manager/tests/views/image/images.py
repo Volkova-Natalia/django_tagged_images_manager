@@ -32,6 +32,11 @@ class ImagesViewsTestCase(BaseImageViewsTestCase):
         self.assertEquals(response.status_code,
                           status.HTTP_200_OK,
                           f'{self.assert_message} test_get_success')
+        self.assertEquals([response.data[0]['id'], response.data[0]['tags']],
+                          [image.id, []],
+                          f'{self.assert_message} test_get_success')
+        self.assertTrue(response.data[0]['content'].endswith(image.content.url),
+                        f'{self.assert_message} test_get_success')
 
     def test_get_401_fail(self):
         response = self.get(anonymous=True)
@@ -53,8 +58,8 @@ class ImagesViewsTestCase(BaseImageViewsTestCase):
         self.assertEquals(image_new.metadata,
                           data_post['metadata'],
                           f'{self.assert_message} test_post_success')
-        data_saved = ImageWithMetadata(filename=self.image_0_filename).data
         if json.loads(data_post['metadata'])['ImageFormat'] == 'PNG':
+            data_saved = ImageWithMetadata(filename=image_new.content.path).data
             self.assertEquals(data_saved['content'],
                               data_post['content'],
                               f'{self.assert_message} test_post_success')

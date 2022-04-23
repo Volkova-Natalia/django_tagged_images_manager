@@ -25,23 +25,19 @@ class ImageDetailsViewsTestCase(BaseImageViewsTestCase):
         return super().delete(url=f'{self.base_url}{image_id}', **kwargs)
 
     def test_get_success(self):
-        data_in_db = {
-            'content': 'image_0'
-        }
-        image = self._create_image_in_db(**data_in_db)
+        image = self._create_image_in_db(filename=self.image_0_filename)
         response = self.get(image_id=image.id)
         self.assertEquals(response.status_code,
                           status.HTTP_200_OK,
                           f'{self.assert_message} test_get_success')
-        self.assertEquals([response.data['id'], response.data['content'], response.data['tags']],
-                          [image.id, image.content, []],
+        self.assertEquals([response.data['id'], response.data['tags']],
+                          [image.id, []],
                           f'{self.assert_message} test_get_success')
+        self.assertTrue(response.data['content'].endswith(image.content.url),
+                        f'{self.assert_message} test_get_success')
 
     def test_get_401_fail(self):
-        data_in_db = {
-            'content': 'image_0'
-        }
-        image = self._create_image_in_db(**data_in_db)
+        image = self._create_image_in_db(filename=self.image_0_filename)
         response = self.get(anonymous=True, image_id=image.id)
         self.assertEquals(response.status_code,
                           status.HTTP_401_UNAUTHORIZED,
@@ -72,7 +68,8 @@ class ImageDetailsViewsTestCase(BaseImageViewsTestCase):
                           [image.id, image.tags],
                           f'{self.assert_message} test_put_success')
         if json.loads(data_put['metadata'])['ImageFormat'] == 'PNG':
-            self.assertEquals(data_put['content'],
+            data_saved = ImageWithMetadata(filename=image_new.content.path).data
+            self.assertEquals(data_saved['content'],
                               data_put['content'],
                               f'{self.assert_message} test_post_success')
 
