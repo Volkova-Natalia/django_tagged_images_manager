@@ -1,2 +1,2 @@
-CREATE DATABASE IF NOT EXISTS test_db;
-USE test_db;
+CREATE DATABASE IF NOT EXISTS tagged_images_manager_service_test_db;
+USE tagged_images_manager_service_test_db;

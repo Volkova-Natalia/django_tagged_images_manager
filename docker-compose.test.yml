@@ -8,15 +8,18 @@ services:
       - 8080:8080
     depends_on:
       - db
+    environment:
+      - POSTGRES_DB=tagged_images_manager_service_test_db
+      - POSTGRES_HOST=db
 
   db:
     image: postgres:14  # https://hub.docker.com/_/postgres
     environment:
-      POSTGRES_DB: 'test_db'
-      POSTGRES_USER: 'postgres'
-      POSTGRES_PASSWORD: 'admin'
+      - POSTGRES_DB=tagged_images_manager_service_test_db
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
-      - 5432:5432
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
     restart: always
     volumes:
       - ./init_test_db.sql:/docker-entrypoint-initdb.d/init_test_db.sql
