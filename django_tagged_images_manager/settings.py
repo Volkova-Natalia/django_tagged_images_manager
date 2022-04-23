@@ -33,10 +33,13 @@ ENVIRONMENT = os.getenv('ENVIRONMENT', 'local')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(strtobool(os.getenv('DEBUG', 'True' if ENVIRONMENT == 'local' else 'False')))
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-]
+
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', [])
+
+CORS_ALLOW_ALL_ORIGINS = bool(strtobool(os.getenv('CORS_ALLOW_ALL_ORIGINS', 'True')))
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', [])
+CORS_ALLOW_CREDENTIALS = bool(strtobool(os.getenv('CORS_ALLOW_CREDENTIALS', 'True')))
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', [])
 
 
 # Application definition
@@ -52,6 +55,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'apps.manager',
 ]
+if ENVIRONMENT == 'AWS':
+    INSTALLED_APPS.append('storages')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -153,3 +158,17 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+if ENVIRONMENT == 'AWS':
+    AWS_STORAGE_BUCKET_NAME = 'tagged-images-manager'
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    AWS_LOCATION = 'media'
+
+
+if ENVIRONMENT == 'AWS':
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+elif ENVIRONMENT == 'local':
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+else:
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'

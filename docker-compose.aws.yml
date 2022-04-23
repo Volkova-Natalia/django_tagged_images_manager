@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile_AWS
+    command: >
+      sh -c "./scripts/wait-for-postgres.sh &&
+             python3 -m manage migrate &&
+             ./scripts/wait-for-postgres.sh &&
+             python3 -m manage runserver 0.0.0.0:8000"
+    volumes:
+      - .:/tagged_images_manager_service
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    environment:
+      - ENVIRONMENT=AWS
+      - POSTGRES_DB=tagged_images_manager_service_db
+      - POSTGRES_HOST=db
+
+  db:
+    image: postgres:14  # https://hub.docker.com/_/postgres
+    environment:
+      - ENVIRONMENT=AWS
+      - POSTGRES_DB=tagged_images_manager_service_db
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    restart: always
+    volumes:
+      - ./scripts/init_db.sh:/docker-entrypoint-initdb.d/init_db.sh
+      - app-db-data:/var/lib/postgresql
+
+volumes:
+  app-db-data:

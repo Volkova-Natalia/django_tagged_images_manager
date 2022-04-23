@@ -6,8 +6,7 @@ from django.db import models
 from django.urls import reverse
 from django.dispatch import receiver
 from django.core.files.base import ContentFile
-from django.core.files.storage import FileSystemStorage
-from django.conf import settings
+from django.core.files.storage import default_storage
 
 from .base import BaseModel
 from .tag import Tag
@@ -23,15 +22,10 @@ def name_file(instance, filename):
     return f'images/{file_path}{uuid4()}-{file_name}'
 
 
-def select_storage():
-    return FileSystemStorage()
-    # return FileSystemStorage() if settings.DEBUG else S3Storage()
-
-
 class Image(BaseModel):
     content = models.ImageField(
         upload_to=name_file,
-        storage=select_storage,
+        storage=default_storage,
         null=False, blank=False, unique=True,
         verbose_name='Content',
         help_text='Image',
