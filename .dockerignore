@@ -1,0 +1,13 @@
+.git
+.github
+.idea
+**/_*
+!__init__py
+venv
+.coverage
+db.sqlite3
+**/*.log
+**/*log*.*
+**/*копия*
+
+**/__pycache__

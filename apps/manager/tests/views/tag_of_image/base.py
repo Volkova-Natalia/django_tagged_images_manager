@@ -32,6 +32,7 @@ class BaseTagOfImageViewsTestCase(BaseViewsTestCase):
         image = Image(metadata=data_to_db['metadata'], **kwargs)
         image.save_file(content=data_to_db['content'])
         image.save()
-        image.tags.add(tag)
+        if tag is not None:
+            image.tags.add(tag)
         self.image_file_saved = image.content.name
         return image
