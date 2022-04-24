@@ -11,13 +11,19 @@ class TagOfImageDetailsViewsTestCase(BaseTagOfImageViewsTestCase):
     assert_message = 'tag_of_image details views'
 
     def get(self, *, image_id: int = 0, tag_value: str = '', **kwargs) -> Response:
-        return super().get(url=f'{self.base_url}{image_id}/tags/{tag_value}/', **kwargs)
+        return super().get(url=f'{self.base_url}{image_id}/tags/{tag_value}', **kwargs)
 
     def put(self, *, image_id: int = 0, tag_value: str = '', **kwargs) -> Response:
-        return super().put(url=f'{self.base_url}{image_id}/tags/{tag_value}/', **kwargs)
+        return super().put(url=f'{self.base_url}{image_id}/tags/{tag_value}', **kwargs)
 
     def delete(self, *, image_id: int = 0, tag_value: str = '', **kwargs) -> Response:
-        return super().delete(url=f'{self.base_url}{image_id}/tags/{tag_value}/', **kwargs)
+        return super().delete(url=f'{self.base_url}{image_id}/tags/{tag_value}', **kwargs)
+
+    def test_get_405_fail(self):
+        response = self.get()
+        self.assertEquals(response.status_code,
+                          status.HTTP_405_METHOD_NOT_ALLOWED,
+                          f'{self.assert_message} test_get_405_fail')
 
     def test_put_success(self):
         tag_in_db = {

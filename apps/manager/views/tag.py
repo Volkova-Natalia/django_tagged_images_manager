@@ -1,65 +1,29 @@
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
 from apps.manager.models import Tag
 from apps.manager.serializers import TagGetSerializer, TagPostSerializer, TagPutSerializer
 from .base import BaseView
 
 
-class TagsView(BaseView):
-    model = Tag
-    get_serializer = TagGetSerializer
-    post_serializer = TagPostSerializer
+class TagsView(BaseView, ModelViewSet):
+    queryset = Tag.objects.all()
+    serializer_class = TagGetSerializer
 
-    def get(self, request: Request, *args, **kwargs) -> Response:
-        objs = self.model.objects.all()
-        serializer = self.get_serializer(objs, context={'request': request}, many=True)
-        return self.response_200(data=serializer.data)
+    def get_serializer_class(self):
+        if self.action in ['list', 'retrieve']:
+            return TagGetSerializer
+        if self.action in ['create']:
+            return TagPostSerializer
+        if self.action in ['update']:
+            return TagPutSerializer
+        return super().get_serializer_class()
 
-    def post(self, request: Request, *args, **kwargs) -> Response:
-        serializer = self.post_serializer(data=request.data, context={'request': request})
-        if serializer.is_valid():
-            obj = serializer.save()
-            response = self.response_201(
-                data={
-                    'value': obj.value,
-                }
-            )
-            return response
-        return self.response_400(data=serializer.errors)
-
-
-class TagDetailsView(BaseView):
-    model = Tag
-    get_serializer = TagGetSerializer
-    put_serializer = TagPutSerializer
-
-    def _get_object(self, *, obj_value: str):
-        try:
-            obj = self.model.objects.get(value=obj_value)
-        except self.model.DoesNotExist:
-            return None
-        return obj
-
-    def get(self, request: Request, tag_value: str, *args, **kwargs) -> Response:
-        obj = self._get_object(obj_value=tag_value)
-        if not obj:
-            return self.response_404()
-        serializer = self.get_serializer(obj, context={'request': request})
-        return self.response_200(data=serializer.data)
-
-    def put(self, request: Request, tag_value: str, *args, **kwargs) -> Response:
-        obj = self._get_object(obj_value=tag_value)
-        if not obj:
-            return self.response_404()
-        serializer = self.put_serializer(obj, data=request.data, context={'request': request})
-        if serializer.is_valid():
-            serializer.save()
-            return self.response_204()
-        return self.response_400(data=serializer.errors)
-
-    def delete(self, request: Request, tag_value: str, *args, **kwargs) -> Response:
-        obj_count, obj = self.model.objects.filter(value=tag_value).delete()
-        if obj_count == 0:
-            return self.response_404()
+    def update(self, request: Request, *args, **kwargs) -> Response:
+        super().update(request, *args, **kwargs)
         return self.response_204()
+
+    def create(self, request: Request, *args, **kwargs) -> Response:
+        response = super().create(request, *args, **kwargs)
+        return self.response_201(data=response.data, **response.get('headers', {}))

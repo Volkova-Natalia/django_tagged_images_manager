@@ -38,6 +38,12 @@ class ImagePostSerializer(serializers.Serializer):
         return obj
 
 
+class ImagePostResponseSerializer(serializers.Serializer):
+    id = serializers.IntegerField(
+        required=True,
+    )
+
+
 class ImagePutSerializer(serializers.Serializer):
     content = serializers.CharField(
         allow_blank=False,

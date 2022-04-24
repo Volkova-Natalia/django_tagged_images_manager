@@ -19,4 +19,4 @@ class Tag(BaseModel):
         return self.value
 
     def get_absolute_url(self):
-        return reverse('tag-details', kwargs={'tag_value': self.value})
+        return reverse('tag-detail', kwargs={'tag_value': self.value})
