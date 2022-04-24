@@ -1,6 +1,7 @@
 import base64
 
 from rest_framework import serializers
+from django.db import transaction
 
 from apps.manager.models import Image
 
@@ -32,9 +33,15 @@ class ImagePostSerializer(serializers.Serializer):
         img_base64 = validated_data['content'].encode(coder)
         img_byte = base64.b64decode(img_base64)
 
-        obj = Image(metadata=str(validated_data['metadata']))
-        obj.save_file(content=img_byte)
-        obj.save()
+        try:
+            with transaction.atomic():
+                obj = Image(metadata=str(validated_data['metadata']))
+                obj.save()
+        except Exception:
+            raise
+        else:
+            obj.save_file(content=img_byte)
+
         return obj
 
 
@@ -61,10 +68,15 @@ class ImagePutSerializer(serializers.Serializer):
 
         old_file = instance.content.name
 
-        instance.metadata = validated_data.get('metadata', instance.metadata)
-        instance.save_file(content=img_byte)
-        instance.save()
+        try:
+            with transaction.atomic():
+                instance.metadata = validated_data.get('metadata', instance.metadata)
+                instance.save()
+        except Exception:
+            raise
+        else:
+            instance.save_file(content=img_byte)
+            if Image().content.storage.exists(old_file):
+                Image().content.storage.delete(old_file)
 
-        if Image().content.storage.exists(old_file):
-            Image().content.storage.delete(old_file)
         return instance

@@ -1,4 +1,26 @@
-## Local testing the project
+# Tagged Images manager
+
+API to manage images and their tags.  
+
+## Run local
+
+* Clone the project  
+* Create **.env** file in [root](https://github.com/Volkova-Natalia/django_tagged_images_manager/) directory like [.env.sample](https://github.com/Volkova-Natalia/django_tagged_images_manager/blob/master/.env.sample)  
+* Set environment variables in the **.env** file (uncommented variables - **OBLIGATORILY**, exclude *AWS_* variables)  
+Set ALLOWED_HOSTS in the file **.env**:
+```
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+```
+* Run tests in docker using command  
+```
+docker-compose -f docker-compose.local.yml up
+```  
+* Stops containers and removes containers, networks, volumes, and images created by command up  
+```
+docker-compose -f docker-compose.local.yml down
+```  
+
+## Local testing the project in docker
 
 * Clone the project  
 * Create **.env** file in [root](https://github.com/Volkova-Natalia/django_tagged_images_manager/) directory like [.env.sample](https://github.com/Volkova-Natalia/django_tagged_images_manager/blob/master/.env.sample)  
@@ -14,7 +36,7 @@ docker-compose -f docker-compose.test.yml down
 
 <br>
 
-## Work in AWS
+## Run in AWS
 
 * You have to set **ALL** environment variables, which are uncommented in file [.env.sample](https://github.com/Volkova-Natalia/django_tagged_images_manager/blob/master/.env.sample)  
 * You should use [docker-compose.aws.yml](https://github.com/Volkova-Natalia/django_tagged_images_manager/blob/master/docker-compose.aws.yml) to running the service  
