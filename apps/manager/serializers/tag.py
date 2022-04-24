@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 
-from apps.manager.models.tag import Tag
+from apps.manager.models import Tag
 
 
 class TagSerializer(ModelSerializer):
@@ -11,33 +11,14 @@ class TagSerializer(ModelSerializer):
         ]
 
 
-class TagWithoutPKSerializer(ModelSerializer):
+class TagGetSerializer(ModelSerializer):
     class Meta:
         model = Tag
         fields = [
+            'value',
+            'created_date',
+            'images',
         ]
-
-
-class TagGetSerializer(TagSerializer):
-    class Meta(TagSerializer.Meta):
-        fields = TagSerializer.Meta.fields.copy()
-        fields.append('created_date')
-        fields.append('images')
-        extra_kwargs = {
-            'value': {
-                'read_only': True,
-                'required': True,
-            },
-            'created_date': {
-                'read_only': True,
-                'required': True,
-            },
-            'images': {
-                'many': True,
-                'read_only': True,
-                'required': True,
-            },
-        }
 
 
 class TagPostSerializer(TagSerializer):

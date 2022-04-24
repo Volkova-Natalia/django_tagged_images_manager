@@ -1,8 +1,8 @@
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from apps.manager.models.tag import Tag
-from apps.manager.serializers.tag import TagGetSerializer, TagPostSerializer, TagPutSerializer
+from apps.manager.models import Tag
+from apps.manager.serializers import TagGetSerializer, TagPostSerializer, TagPutSerializer
 from .base import BaseView
 
 
@@ -12,7 +12,7 @@ class TagsView(BaseView):
     post_serializer = TagPostSerializer
 
     def get(self, request: Request, *args, **kwargs) -> Response:
-        objs = self.model.objects.all()[:]
+        objs = self.model.objects.all()
         serializer = self.get_serializer(objs, context={'request': request}, many=True)
         return self.response_200(data=serializer.data)
 

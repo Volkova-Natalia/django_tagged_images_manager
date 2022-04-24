@@ -55,7 +55,7 @@ class Image(BaseModel):
     def get_absolute_url(self):
         return reverse('image-details', kwargs={'image_id': self.id})
 
-    def save_file(self, content: str):
+    def save_file(self, content: bytes):
         temp_file = ContentFile(content)
         self.content.save('', temp_file)
 

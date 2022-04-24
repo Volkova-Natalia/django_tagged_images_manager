@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.response import Response
 
-from apps.manager.models.image import Image
+from apps.manager.models import Image
 from .base import BaseTagOfImageViewsTestCase
 
 

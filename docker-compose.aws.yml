@@ -23,7 +23,6 @@ services:
   db:
     image: postgres:14  # https://hub.docker.com/_/postgres
     environment:
-      - ENVIRONMENT=AWS
       - POSTGRES_DB=tagged_images_manager_service_db
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}

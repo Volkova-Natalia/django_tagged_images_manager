@@ -1,8 +1,8 @@
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from apps.manager.models.image import Image
-from apps.manager.serializers.image import ImageGetSerializer, ImagePostSerializer, ImagePutSerializer
+from apps.manager.models import Image
+from apps.manager.serializers import ImageGetSerializer, ImagePostSerializer, ImagePutSerializer
 from .base import BaseView
 
 
@@ -12,7 +12,7 @@ class ImagesView(BaseView):
     post_serializer = ImagePostSerializer
 
     def get(self, request: Request, *args, **kwargs) -> Response:
-        objs = self.model.objects.all()[:]
+        objs = self.model.objects.all()
         serializer = self.get_serializer(objs, context={'request': request}, many=True)
         return self.response_200(data=serializer.data)
 

@@ -3,9 +3,9 @@ import json
 from rest_framework import status
 from rest_framework.response import Response
 
-from apps.manager.models.image import Image
+from apps.manager.models import Image
 from .base import BaseImageViewsTestCase
-from ..utils.imagefile import ImageWithMetadata
+from apps.manager.tests.views.utils.imagefile import ImageWithMetadata
 
 
 class ImageDetailsViewsTestCase(BaseImageViewsTestCase):
@@ -13,16 +13,16 @@ class ImageDetailsViewsTestCase(BaseImageViewsTestCase):
     assert_message = 'image details views'
 
     def get(self, *, image_id: int = 0, **kwargs) -> Response:
-        return super().get(url=f'{self.base_url}{image_id}', **kwargs)
+        return super().get(url=f'{self.base_url}{image_id}/', **kwargs)
 
     def put(self, *, image_id: int = 0, **kwargs) -> Response:
         my_headers = {
             'HTTP_X_Content_Image_coder': 'utf-8',
         }
-        return super().put(url=f'{self.base_url}{image_id}', **my_headers, **kwargs)
+        return super().put(url=f'{self.base_url}{image_id}/', **my_headers, **kwargs)
 
     def delete(self, *, image_id: int = 0, **kwargs) -> Response:
-        return super().delete(url=f'{self.base_url}{image_id}', **kwargs)
+        return super().delete(url=f'{self.base_url}{image_id}/', **kwargs)
 
     def test_get_success(self):
         image = self._create_image_in_db(filename=self.image_0_filename)

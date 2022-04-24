@@ -1,9 +1,9 @@
 from typing import Optional
 
-from apps.manager.models.image import Image
-from apps.manager.models.tag import Tag
-from ..base import BaseViewsTestCase
-from ..utils.imagefile import ImageWithMetadata
+from apps.manager.models import Image
+from apps.manager.models import Tag
+from apps.manager.tests.views.base import BaseViewsTestCase
+from apps.manager.tests.views.utils.imagefile import ImageWithMetadata
 
 
 class BaseTagOfImageViewsTestCase(BaseViewsTestCase):

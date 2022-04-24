@@ -3,7 +3,7 @@ from typing import Optional
 from rest_framework import status
 from rest_framework.response import Response
 
-from ..base import BaseViewsTestCase
+from apps.manager.tests.views.base import BaseViewsTestCase
 
 
 class TagsViewsTestCase(BaseViewsTestCase):

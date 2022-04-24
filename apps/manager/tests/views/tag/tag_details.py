@@ -1,8 +1,8 @@
 from rest_framework import status
 from rest_framework.response import Response
 
-from apps.manager.models.tag import Tag
-from ..base import BaseViewsTestCase
+from apps.manager.models import Tag
+from apps.manager.tests.views.base import BaseViewsTestCase
 
 
 class TagDetailsViewsTestCase(BaseViewsTestCase):
@@ -10,13 +10,13 @@ class TagDetailsViewsTestCase(BaseViewsTestCase):
     assert_message = 'tag details views'
 
     def get(self, *, tag_value: str = '', **kwargs) -> Response:
-        return super().get(url=f'{self.base_url}{tag_value}', **kwargs)
+        return super().get(url=f'{self.base_url}{tag_value}/', **kwargs)
 
     def put(self, *, tag_value: str = '', **kwargs) -> Response:
-        return super().put(url=f'{self.base_url}{tag_value}', **kwargs)
+        return super().put(url=f'{self.base_url}{tag_value}/', **kwargs)
 
     def delete(self, *, tag_value: str = '', **kwargs) -> Response:
-        return super().delete(url=f'{self.base_url}{tag_value}', **kwargs)
+        return super().delete(url=f'{self.base_url}{tag_value}/', **kwargs)
 
     def _create_tag_in_db(self, **kwargs) -> Tag:
         tag = Tag.objects.create(**kwargs)

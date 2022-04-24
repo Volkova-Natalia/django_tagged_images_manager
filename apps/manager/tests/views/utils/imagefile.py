@@ -37,8 +37,8 @@ class ImageWithMetadata:
                 'ImageWidth': img.width,
                 'ImageFormat': img.format,
                 'ImageMode': img.mode,
-                'IsImageAnimated': getattr(img, "is_animated", False),
-                'FramesInImage': getattr(img, "n_frames", 1),
+                'IsImageAnimated': getattr(img, 'is_animated', False),
+                'FramesInImage': getattr(img, 'n_frames', 1),
                 'exif': {},
             }
             exifdata = img.getexif()

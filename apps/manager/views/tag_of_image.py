@@ -1,9 +1,9 @@
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from apps.manager.models.image import Image
-from apps.manager.models.tag import Tag
-from apps.manager.serializers.tag import TagPostSerializer, TagPutSerializer
+from apps.manager.models import Image
+from apps.manager.models import Tag
+from apps.manager.serializers import TagPostSerializer, TagPutSerializer
 from .base import BaseView
 
 

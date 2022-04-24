@@ -1,59 +1,20 @@
 import base64
 
-from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 
-from apps.manager.models.image import Image
+from apps.manager.models import Image
 
 
-class ImageSerializer(ModelSerializer):
+class ImageGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
         fields = [
             'id',
             'content',
             'metadata',
+            'created_date',
             'tags',
         ]
-
-
-class ImageWithoutPKSerializer(ModelSerializer):
-    class Meta:
-        model = Image
-        fields = [
-            'content',
-            'metadata',
-            'tags',
-        ]
-
-
-class ImageGetSerializer(ImageSerializer):
-    class Meta(ImageSerializer.Meta):
-        fields = ImageSerializer.Meta.fields.copy()
-        fields.append('created_date')
-        extra_kwargs = {
-            'id': {
-                'read_only': True,
-                'required': True,
-            },
-            'content': {
-                'read_only': True,
-                'required': True,
-            },
-            'metadata': {
-                'read_only': True,
-                'required': True,
-            },
-            'created_date': {
-                'read_only': True,
-                'required': True,
-            },
-            'tags': {
-                'many': True,
-                'read_only': True,
-                'required': True,
-            },
-        }
 
 
 class ImagePostSerializer(serializers.Serializer):
