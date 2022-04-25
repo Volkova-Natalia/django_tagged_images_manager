@@ -50,7 +50,7 @@ class Image(BaseModel):
     )
 
     def __str__(self):
-        return ''
+        return self.content.name
 
     def get_absolute_url(self):
         return reverse('image-detail', kwargs={'image_id': self.id})
