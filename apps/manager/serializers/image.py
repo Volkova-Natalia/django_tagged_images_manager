@@ -27,12 +27,14 @@ class ImagePostSerializer(serializers.Serializer):
         required=True,
     )
 
-    def create(self, validated_data: dict) -> Image:
+    def validate(self, data):
         headers = self.context['request'].headers
         coder = headers['X-Content-Image-coder'] if 'X-Content-Image-coder' in headers else 'utf-18'
-        img_base64 = validated_data['content'].encode(coder)
-        img_byte = base64.b64decode(img_base64)
+        img_base64 = data['content'].encode(coder)
+        data['content'] = base64.b64decode(img_base64)
+        return data
 
+    def create(self, validated_data: dict) -> Image:
         try:
             with transaction.atomic():
                 obj = Image(metadata=str(validated_data['metadata']))
@@ -40,7 +42,7 @@ class ImagePostSerializer(serializers.Serializer):
         except Exception:
             raise
         else:
-            obj.save_file(content=img_byte)
+            obj.save_file(content=validated_data['content'])
 
         return obj
 
@@ -60,12 +62,14 @@ class ImagePutSerializer(serializers.Serializer):
         required=True,
     )
 
-    def update(self, instance: Image, validated_data: dict) -> Image:
+    def validate(self, data):
         headers = self.context['request'].headers
         coder = headers['X-Content-Image-coder'] if 'X-Content-Image-coder' in headers else 'utf-18'
-        img_base64 = validated_data['content'].encode(coder)
-        img_byte = base64.b64decode(img_base64)
+        img_base64 = data['content'].encode(coder)
+        data['content'] = base64.b64decode(img_base64)
+        return data
 
+    def update(self, instance: Image, validated_data: dict) -> Image:
         old_file = instance.content.name
 
         try:
@@ -75,7 +79,7 @@ class ImagePutSerializer(serializers.Serializer):
         except Exception:
             raise
         else:
-            instance.save_file(content=img_byte)
+            instance.save_file(content=validated_data['content'])
             if Image().content.storage.exists(old_file):
                 Image().content.storage.delete(old_file)
 
