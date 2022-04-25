@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import ast
 from dotenv import load_dotenv
 
 
@@ -18,12 +19,12 @@ ENVIRONMENT = os.getenv('ENVIRONMENT', LOCAL)
 DEBUG = os.getenv('DEBUG', True if ENVIRONMENT == LOCAL else False)
 
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', [])
+ALLOWED_HOSTS = ast.literal_eval(os.getenv('ALLOWED_HOSTS', '[]'))
 
 CORS_ALLOW_ALL_ORIGINS = os.getenv('CORS_ALLOW_ALL_ORIGINS', True)
-CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', [])
+CORS_ALLOWED_ORIGINS = ast.literal_eval(os.getenv('CORS_ALLOWED_ORIGINS', '[]'))
 CORS_ALLOW_CREDENTIALS = os.getenv('CORS_ALLOW_CREDENTIALS', True)
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', [])
+CSRF_TRUSTED_ORIGINS = ast.literal_eval(os.getenv('CSRF_TRUSTED_ORIGINS', '[]'))
 
 
 INSTALLED_APPS = [

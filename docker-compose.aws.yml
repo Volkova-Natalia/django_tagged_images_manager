@@ -1,9 +1,11 @@
 version: '3.8'
 services:
   web:
+    container_name: tagged_images_manager_service_aws_web_container
     build:
       context: .
       dockerfile: Dockerfile_AWS
+    image: tagged_images_manager_service_aws_web
     command: >
       sh -c "./scripts/wait-for-postgres.sh &&
              python3 -m manage migrate &&
@@ -21,7 +23,11 @@ services:
       - POSTGRES_HOST=db
 
   db:
-    image: postgres:14  # https://hub.docker.com/_/postgres
+    container_name: tagged_images_manager_service_aws_db_container
+    build:
+      context: .
+      dockerfile: Dockerfile_postgresql
+    image: tagged_images_manager_service_aws_postgresql
     environment:
       - POSTGRES_DB=tagged_images_manager_service_db
       - POSTGRES_USER=${POSTGRES_USER}
@@ -31,7 +37,7 @@ services:
     restart: always
     volumes:
       - ./scripts/init_db.sh:/docker-entrypoint-initdb.d/init_db.sh
-      - app-db-data:/var/lib/postgresql
+      - aws-app-db-data:/var/lib/postgresql
 
 volumes:
-  app-db-data:
+  aws-app-db-data:

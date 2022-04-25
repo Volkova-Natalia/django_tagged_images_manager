@@ -9,7 +9,7 @@ API to manage images and their tags.
 * Set environment variables in the **.env** file (uncommented variables - **OBLIGATORILY**, exclude *AWS_* variables)  
 Set ALLOWED_HOSTS in the file **.env**:
 ```
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = "['localhost', '127.0.0.1']"
 ```
 * Run tests in docker using command  
 ```
@@ -66,7 +66,7 @@ docker-compose -f docker-compose.aws.yml up
 /manager/images/{int:image_id}/tags/{str:tag_value}/
 ```  
 
-See mo details in [swagger](https://volkova-natalia.github.io/django_tagged_images_manager/)  
+See more details in [swagger](https://volkova-natalia.github.io/django_tagged_images_manager/)  
 
 <br>
 
