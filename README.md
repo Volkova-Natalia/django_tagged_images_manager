@@ -66,6 +66,9 @@ docker-compose -f docker-compose.aws.yml up
 /manager/images/{int:image_id}/tags/{str:tag_value}/
 ```  
 
+See mo details in [swagger](https://volkova-natalia.github.io/django_tagged_images_manager/)  
+
+<br>
 
 When you add a tag to an image:
 1. If the tag exists, the image will get a link to the tag.  
