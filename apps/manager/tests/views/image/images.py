@@ -27,13 +27,17 @@ class ImagesViewsTestCase(BaseImageViewsTestCase):
         return super().post(url=url, **my_headers, **kwargs)
 
     def test_get_success(self):
-        image = self._create_image_in_db(filename=self.image_0_filename)
+        tag_in_db = {
+            'value': 'tag_0'
+        }
+        tag = self._create_tag_in_db(**tag_in_db)
+        image = self._create_image_in_db(filename=self.image_0_filename, tag=tag)
         response = self.get()
         self.assertEquals(response.status_code,
                           status.HTTP_200_OK,
                           f'{self.assert_message} test_get_success')
         self.assertEquals([response.data[0]['id'], response.data[0]['tags']],
-                          [image.id, []],
+                          [image.id, [tag_in_db['value']]],
                           f'{self.assert_message} test_get_success')
         self.assertTrue(response.data[0]['content'].endswith(image.content.url),
                         f'{self.assert_message} test_get_success')

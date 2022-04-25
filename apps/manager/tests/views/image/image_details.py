@@ -85,6 +85,16 @@ class ImageDetailsViewsTestCase(BaseImageViewsTestCase):
                           status.HTTP_404_NOT_FOUND,
                           f'{self.assert_message} test_put_404_fail')
 
+    def test_put_400_fail(self):
+        image = self._create_image_in_db(filename=self.image_0_filename)
+        data_put = ImageWithMetadata(filename=self.image_1_filename).data
+        data_put["not_content"] = data_put["content"]
+        del data_put["content"]
+        response = self.put(image_id=image.id, data=data_put)
+        self.assertEquals(response.status_code,
+                          status.HTTP_400_BAD_REQUEST,
+                          f'{self.assert_message} test_put_400_fail')
+
     def test_delete_success(self):
         image = self._create_image_in_db(filename=self.image_0_filename)
         response = self.delete(image_id=image.id)

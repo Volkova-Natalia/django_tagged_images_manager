@@ -60,7 +60,7 @@ class BaseView(APIView):
 
     def response_404(self, **kwargs) -> Response:
         return Response(
-            data=None,
+            data={"detail": "ErrorDetail(string='Not found.', code='not_found')"},
             status=status.HTTP_404_NOT_FOUND,
             content_type=self.content_type,
             **kwargs
