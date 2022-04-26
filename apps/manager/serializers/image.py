@@ -1,7 +1,6 @@
 import base64
 
 from rest_framework import serializers
-from django.db import transaction
 
 from apps.manager.models import Image
 
@@ -35,15 +34,21 @@ class ImagePostSerializer(serializers.Serializer):
         return data
 
     def create(self, validated_data: dict) -> Image:
-        try:
-            with transaction.atomic():
-                obj = Image(metadata=str(validated_data['metadata']))
-                obj.save()
-        except Exception:
-            raise
-        else:
-            obj.save_file(content=validated_data['content'])
+        """
+        A bad situation is possible:
+        1. obj (field 'metadata') will be saved to db successfully
+        2. image file will be saved to storage successfully
+        3. updating of the obj in db (field 'content') will fail
 
+        As a result:
+        1. obj from db will de removed - successfully (a transaction will rollback)
+        2. image file will be in storage
+
+        It is not possible to solve the issue here, you should have garbage collector for the unused files.
+        """
+        obj = Image(metadata=str(validated_data['metadata']))
+        obj.save()
+        obj.save_file(content=validated_data['content'])
         return obj
 
 
@@ -70,17 +75,24 @@ class ImagePutSerializer(serializers.Serializer):
         return data
 
     def update(self, instance: Image, validated_data: dict) -> Image:
+        """
+        A bad situation is possible:
+        1. instance (field 'metadata') will be updated in db successfully
+        2. image file will be saved to storage successfully
+        3. updating of the instance in db (field 'content') will fail
+
+        As a result:
+        1. instance from db will rollback - successfully (a transaction will rollback)
+        2. image file will be in storage
+
+        It is not possible to solve the issue here, you should have garbage collector for the unused files.
+        """
         old_file = instance.content.name
 
-        try:
-            with transaction.atomic():
-                instance.metadata = validated_data.get('metadata', instance.metadata)
-                instance.save()
-        except Exception:
-            raise
-        else:
-            instance.save_file(content=validated_data['content'])
-            if Image().content.storage.exists(old_file):
-                Image().content.storage.delete(old_file)
+        instance.metadata = validated_data.get('metadata', instance.metadata)
+        instance.save()
+        instance.save_file(content=validated_data['content'])
+        if Image().content.storage.exists(old_file):
+            Image().content.storage.delete(old_file)
 
         return instance
