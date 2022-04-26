@@ -8,7 +8,9 @@ var schemas_tag_of_image =
       "nullable": false
     },
     "created_date": {
+      "description": "Created date of the tag",
       "type": "string",
+      "format": "date-time",
       "uniqueItems": false,
       "nullable": false
     },

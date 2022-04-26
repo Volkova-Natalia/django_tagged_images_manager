@@ -13,23 +13,26 @@ var schemas_image =
       "nullable": false
     },
     "metadata": {
+      "description": "Metadata of the image",
       "type": "string",
       "uniqueItems": false,
       "nullable": true
     },
     "created_date": {
+      "description": "Created date of the image",
       "type": "string",
+      "format": "date-time",
       "uniqueItems": false,
       "nullable": false
     },
     "tags": {
+      "description": "Tags for the image",
       "type": "array",
       "items": {
-        "value": {
-          "type": "string",
-          "uniqueItems": true,
-          "nullable": false
-        },
+        "description": "Tag value",
+        "type": "string",
+        "uniqueItems": true,
+        "nullable": false
       }
     }
   }

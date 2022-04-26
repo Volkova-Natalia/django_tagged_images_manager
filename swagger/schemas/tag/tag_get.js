@@ -2,9 +2,15 @@ var schemas_tag_get_response =
 {
   "type": "object",
   "properties": {
-    "value": schemas_tag.properties.value,
-    "created_date": schemas_tag.properties.created_date,
-    "images": schemas_tag.properties.images
+    "value": { ...schemas_tag.properties.value, ...{
+      "readOnly": true
+    }},
+    "created_date": { ...schemas_tag.properties.created_date, ...{
+      "readOnly": true
+    }},
+    "images": { ...schemas_tag.properties.images, ...{
+      "readOnly": true
+    }}
   },
   "required": [
     "value",
