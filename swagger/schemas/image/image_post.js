@@ -1,5 +1,6 @@
 var schemas_image_post_request =
 {
+  "title": "image_post_request",
   "type": "object",
   "properties": {
     "content": { ...schemas_image.properties.content, ...{
@@ -11,6 +12,7 @@ var schemas_image_post_request =
 
 var schemas_image_post_response =
 {
+  "title": "image_post_response",
   "type": "object",
   "properties": {
     "id": schemas_image.properties.id

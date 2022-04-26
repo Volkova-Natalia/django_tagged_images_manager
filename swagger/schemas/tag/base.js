@@ -15,8 +15,15 @@ var schemas_tag =
       "nullable": false
     },
     "images": {
+      "title": "images",
+      "description": "Images which have the tag",
       "type": "array",
-      "items": schemas_image.properties.id
+      "items": {
+        "description": "Image id",
+        "type": "number",
+        "uniqueItems": true,
+        "nullable": false
+      }
     }
   }
 }

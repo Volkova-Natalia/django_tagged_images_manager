@@ -26,6 +26,7 @@ var schemas_image =
       "nullable": false
     },
     "tags": {
+      "title": "tags",
       "description": "Tags for the image",
       "type": "array",
       "items": {

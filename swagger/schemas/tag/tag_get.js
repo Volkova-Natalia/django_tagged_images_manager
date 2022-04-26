@@ -1,5 +1,6 @@
 var schemas_tag_get_response =
 {
+  "title": "tag_get_response",
   "type": "object",
   "properties": {
     "value": { ...schemas_tag.properties.value, ...{
@@ -21,6 +22,7 @@ var schemas_tag_get_response =
 
 var schemas_tags_get_response =
 {
+  "title": "tags_get_response",
   "type": "array",
   "items": schemas_tag_get_response
 }

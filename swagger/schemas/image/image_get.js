@@ -1,5 +1,6 @@
 var schemas_image_get_response =
 {
+  "title": "image_get_response",
   "type": "object",
   "properties": {
     "id": { ...schemas_image.properties.id, ...{
@@ -32,6 +33,7 @@ var schemas_image_get_response =
 
 var schemas_images_get_response =
 {
+  "title": "images_get_response",
   "type": "array",
   "items": schemas_image_get_response
 }

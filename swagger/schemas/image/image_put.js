@@ -1,5 +1,6 @@
 var schemas_image_put_request =
 {
+  "title": "image_put_request",
   "type": "object",
   "properties": {
     "content": { ...schemas_image.properties.content, ...{
